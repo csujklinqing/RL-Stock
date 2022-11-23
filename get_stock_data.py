@@ -3,7 +3,7 @@ import pandas as pd
 import os
 
 
-OUTPUT = './stockdata'
+OUTPUT = 'd:\\data\\stockdata'
 
 
 def mkdir(directory):
@@ -36,24 +36,29 @@ class Downloader(object):
         print(stock_df)
         return stock_df
 
+    # def run(self):
+    #     stock_df = self.get_codes_by_date(self.date_end)
+    #     for index, row in stock_df.iterrows():
+    #         print(f'processing {row["code"]} {row["code_name"]}')
+    #         df_code = bs.query_history_k_data_plus(row["code"], self.fields,
+    #                                                start_date=self.date_start,
+    #                                                end_date=self.date_end).get_data()
+    #         df_code.to_csv(f'{self.output_dir}/{row["code"]}.csv', index=False)
+    #     self.exit()
     def run(self):
-        stock_df = self.get_codes_by_date(self.date_end)
-        for index, row in stock_df.iterrows():
-            print(f'processing {row["code"]} {row["code_name"]}')
-            df_code = bs.query_history_k_data_plus(row["code"], self.fields,
-                                                   start_date=self.date_start,
-                                                   end_date=self.date_end).get_data()
-            df_code.to_csv(f'{self.output_dir}/{row["code"]}.csv', index=False)
+        code = 'sz.002466'
+        df_code = bs.query_history_k_data_plus(code, self.fields,
+                start_date=self.date_start,end_date=self.date_end).get_data()
+        df_code.to_csv(f'{self.output_dir}/{code}.csv', index=False)
         self.exit()
-
 
 if __name__ == '__main__':
     # 获取全部股票的日K线数据
-    mkdir('./stockdata/train')
-    downloader = Downloader('./stockdata/train', date_start='1990-01-01', date_end='2019-12-31')
+    mkdir('d:\\data\\stockdata\\train')
+    downloader = Downloader('d:\\data\\stockdata\\train', date_start='1990-01-01', date_end='2019-12-31')
     downloader.run()
 
-    mkdir('./stockdata/test')
-    downloader = Downloader('./stockdata/test', date_start='2020-01-01', date_end='2022-11-22')
+    mkdir('d:\\data\\stockdata\\test')
+    downloader = Downloader('d:\\data\\stockdata\\test', date_start='2020-01-01', date_end='2022-11-22')
     downloader.run()
 

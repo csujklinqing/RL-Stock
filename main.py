@@ -17,6 +17,7 @@ plt.rcParams['axes.unicode_minus'] = False
 
 def stock_trade(stock_file):
     day_profits = []
+    print(stock_file)
     df = pd.read_csv(stock_file)
     df = df.sort_values('date')
 
@@ -24,7 +25,7 @@ def stock_trade(stock_file):
     env = DummyVecEnv([lambda: StockTradingEnv(df)])
 
     model = PPO2(MlpPolicy, env, verbose=0, tensorboard_log='./log')
-    model.learn(total_timesteps=int(1e4))
+    model.learn(total_timesteps=int(100))
 
     df_test = pd.read_csv(stock_file.replace('train', 'test'))
 
@@ -49,7 +50,7 @@ def find_file(path, name):
 
 
 def test_a_stock_trade(stock_code):
-    stock_file = find_file('./stockdata/train', str(stock_code))
+    stock_file = find_file('d:\\data\\stockdata\\train', str(stock_code))
 
     daily_profits = stock_trade(stock_file)
     fig, ax = plt.subplots()
@@ -69,7 +70,7 @@ def multi_stock_trade():
     group_result = []
 
     for code in range(start_code, start_code + max_num):
-        stock_file = find_file('./stockdata/train', str(code))
+        stock_file = find_file('d:\\data\\stockdata/train', str(code))
         if stock_file:
             try:
                 profits = stock_trade(stock_file)
@@ -83,7 +84,7 @@ def multi_stock_trade():
 
 if __name__ == '__main__':
     # multi_stock_trade()
-    test_a_stock_trade('sh.600036')
-    # ret = find_file('./stockdata/train', '600036')
+    test_a_stock_trade('sz.002466')
+    # ret = find_file('d:\\data\\stockdata/train', '600036')
     # print(ret)
 
